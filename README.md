@@ -1,6 +1,6 @@
 # @heyanniemoran/responsive-media-query
 
-> Made with create-react-library
+>
 
 [![NPM](https://img.shields.io/npm/v/@heyanniemoran/responsive-media-query.svg)](https://www.npmjs.com/package/@heyanniemoran/responsive-media-query) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
