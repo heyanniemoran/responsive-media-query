@@ -1,36 +1,40 @@
 import React, { useState, useEffect } from 'react';
 
 function useMediaQuery(obj) {
-  var match_media = window.matchMedia(obj.query).matches;
-
-  var _useState = useState(match_media),
+  var _useState = useState(function () {
+    return window.matchMedia(obj.query).matches;
+  }),
       state = _useState[0],
       setState = _useState[1];
 
   useEffect(function () {
-    window.addEventListener('resize', function () {
-      var match_media_effect = window.matchMedia(obj.query).matches;
-      setState(match_media_effect);
-    });
-  });
+    var mql = window.matchMedia(obj.query);
+
+    function handler(e) {
+      setState(e.matches);
+    }
+
+    mql.addEventListener('change', handler);
+    return function () {
+      mql.removeEventListener('change', handler);
+    };
+  }, [obj.query]);
   return state;
 }
 function MediaQuery(props) {
   var query_array = [];
-  var orientation = props.orientation;
-  if (orientation) query_array.push('(orientation: ' + orientation + ')');
-  var minWidth = props.minWidth;
-  if (minWidth) query_array.push('(min-width: ' + minWidth + 'px)');
-  var maxWidth = props.maxWidth;
-  if (maxWidth) query_array.push('(max-width: ' + maxWidth + 'px)');
-  var minHeight = props.minHeight;
-  if (minHeight) query_array.push('(min-height: ' + minHeight + 'px)');
-  var maxHeight = props.maxHeight;
-  if (maxHeight) query_array.push('(max-height: ' + maxHeight + 'px)');
-  var minResolution = props.minResolution;
-  if (minResolution) query_array.push('(' + (typeof minResolution === 'string' ? 'min-resolution' : '-webkit-min-device-pixel-ratio') + ': ' + minResolution + ')');
-  var maxResolution = props.maxResolution;
-  if (maxResolution) query_array.push('(' + (typeof maxResolution === 'string' ? 'max-resolution' : '-webkit-max-device-pixel-ratio') + ': ' + maxResolution + ')');
+
+  function add(field, value, suffix) {
+    if (value) query_array.push("(" + field + ": " + value + suffix + ")");
+  }
+
+  add('orientation', props.orientation);
+  add('min-width', props.minWidth, 'px');
+  add('max-width', props.maxWidth, 'px');
+  add('min-height', props.minHeight, 'px');
+  add('max-height', props.maxHeight, 'px');
+  add('min-resolution', typeof props.minResolution === 'string' ? props.minResolution : props.minResolution + 'dppx');
+  add('max-resolution', typeof props.maxResolution === 'string' ? props.maxResolution : props.maxResolution + 'dppx');
   var query = query_array.join(' and ');
   var matches = useMediaQuery({
     query: query

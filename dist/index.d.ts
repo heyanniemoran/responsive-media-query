@@ -8,8 +8,8 @@ interface MediaProps {
     maxWidth?: number;
     minHeight?: number;
     maxHeight?: number;
-    minResolution?: number | `${number}dppx`;
-    maxResolution?: number | `${number}dppx`;
+    minResolution?: number | string;
+    maxResolution?: number | string;
     children: React.ReactNode | ((matches: boolean) => React.ReactNode);
 }
 export declare function MediaQuery(props: MediaProps): JSX.Element | null;
