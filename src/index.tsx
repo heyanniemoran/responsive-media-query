@@ -31,20 +31,31 @@ interface MediaProps {
 }
 
 export function MediaQuery(props: MediaProps) {
-  const query_array: string[] = [];
-
-  function add(field: string, value: string | number | undefined, suffix?: string) {
-    if (value) query_array.push(`(${field}: ${value}${suffix})`);
+  function getCondition(key: string, value: string) {
+    switch (key) {
+      case 'orientation':
+        return `(orientation: ${value})`;
+      case 'minWidth':
+        return `(min-width: ${value}px)`;
+      case 'maxWidth':
+        return `(max-width: ${value}px)`;
+      case 'minHeight':
+        return `(min-height: ${value}px)`;
+      case 'maxHeight':
+        return `(max-height: ${value}px)`;
+      case 'minResolution':
+        return `(min-resolution: ${typeof value === 'string' ? value : value + 'dppx'})`;
+      case 'maxResolution':
+        return `(max-resolution: ${typeof value === 'string' ? value : value + 'dppx'})`;
+      default:
+        throw new Error('props not found');
+    }
   }
-  add('orientation', props.orientation);
-  add('min-width', props.minWidth, 'px');
-  add('max-width', props.maxWidth, 'px');
-  add('min-height', props.minHeight, 'px');
-  add('max-height', props.maxHeight, 'px');
-  add('min-resolution', typeof props.minResolution === 'string' ? props.minResolution : props.minResolution + 'dppx');
-  add('max-resolution', typeof props.maxResolution === 'string' ? props.maxResolution : props.maxResolution + 'dppx');
 
-  const query = query_array.join(' and ');
+  const query = Object.entries(props)
+    .filter(([key]) => key !== 'children')
+    .map(([key, value]) => `${getCondition(key, value)}`)
+    .join(' and ');
   const matches = useMediaQuery({ query: query });
 
   if (typeof props.children == 'function') return <div>{props.children(matches)}</div>;
