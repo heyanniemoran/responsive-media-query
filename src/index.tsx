@@ -30,36 +30,34 @@ interface MediaProps {
   children: React.ReactNode | ((matches: boolean) => React.ReactNode);
 }
 
-export function MediaQuery(props: MediaProps) {
-  function getCondition(key: string, value: string) {
-    switch (key) {
-      case 'orientation':
-        return `(orientation: ${value})`;
-      case 'minWidth':
-        return `(min-width: ${value}px)`;
-      case 'maxWidth':
-        return `(max-width: ${value}px)`;
-      case 'minHeight':
-        return `(min-height: ${value}px)`;
-      case 'maxHeight':
-        return `(max-height: ${value}px)`;
-      case 'minResolution':
-        return `(min-resolution: ${typeof value === 'string' ? value : value + 'dppx'})`;
-      case 'maxResolution':
-        return `(max-resolution: ${typeof value === 'string' ? value : value + 'dppx'})`;
-      default:
-        throw new Error('props not found');
-    }
-  }
-
+export function MediaQuery({ children, ...props }: MediaProps) {
   const query = Object.entries(props)
-    .filter(([key]) => key !== 'children')
-    .map(([key, value]) => `${getCondition(key, value)}`)
+    .map(([key, value]) => {
+      const condition: string = key
+        .split('')
+        .map((letter: string, idx: number) => {
+          return letter === letter.toUpperCase()
+            ? idx === 0
+              ? letter.toLowerCase()
+              : '-' + letter.toLowerCase()
+            : letter;
+        })
+        .join('');
+      switch (condition) {
+        case 'orientation':
+          return '(' + condition + ': ' + value + ')';
+        case 'min-resolution':
+        case 'max-resolution':
+          return '(' + condition + ': ' + (typeof value === 'string' ? value : value + 'dppx') + ')';
+        default:
+          return '(' + condition + ': ' + value + 'px)';
+      }
+    })
     .join(' and ');
   const matches = useMediaQuery({ query: query });
 
-  if (typeof props.children == 'function') return <div>{props.children(matches)}</div>;
+  if (typeof children === 'function') return <div>{children(matches)}</div>;
 
   if (!matches) return null;
-  return <div>{props.children}</div>;
+  return <div>{children}</div>;
 }

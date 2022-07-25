@@ -12,5 +12,5 @@ interface MediaProps {
     maxResolution?: number | string;
     children: React.ReactNode | ((matches: boolean) => React.ReactNode);
 }
-export declare function MediaQuery(props: MediaProps): JSX.Element | null;
+export declare function MediaQuery({ children, ...props }: MediaProps): JSX.Element | null;
 export {};
