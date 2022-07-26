@@ -1,8 +1,4 @@
-var React = require('react');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
+import React, { useState, useEffect } from 'react';
 
 function _objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
@@ -19,36 +15,31 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   return target;
 }
 
-var _excluded = ["children"];
+const _excluded = ["children"];
 function useMediaQuery(obj) {
-  var _useState = React.useState(function () {
-    return window.matchMedia(obj.query).matches;
-  }),
-      state = _useState[0],
-      setState = _useState[1];
-
-  React.useEffect(function () {
-    var mql = window.matchMedia(obj.query);
+  const [state, setState] = useState(() => window.matchMedia(obj.query).matches);
+  useEffect(() => {
+    const mql = window.matchMedia(obj.query);
 
     function handler(e) {
       setState(e.matches);
     }
 
     mql.addEventListener('change', handler);
-    return function () {
+    return () => {
       mql.removeEventListener('change', handler);
     };
   }, [obj.query]);
   return state;
 }
 function MediaQuery(_ref) {
-  var children = _ref.children,
+  let {
+    children
+  } = _ref,
       props = _objectWithoutPropertiesLoose(_ref, _excluded);
 
-  var query = Object.entries(props).map(function (_ref2) {
-    var key = _ref2[0],
-        value = _ref2[1];
-    var condition = key.split('').map(function (letter, idx) {
+  const query = Object.entries(props).map(([key, value]) => {
+    const condition = key.split('').map((letter, idx) => {
       return letter === letter.toUpperCase() ? idx === 0 ? letter.toLowerCase() : '-' + letter.toLowerCase() : letter;
     }).join('');
 
@@ -64,14 +55,13 @@ function MediaQuery(_ref) {
         return '(' + condition + ': ' + value + 'px)';
     }
   }).join(' and ');
-  var matches = useMediaQuery({
+  const matches = useMediaQuery({
     query: query
   });
-  if (typeof children === 'function') return React__default["default"].createElement("div", null, children(matches));
+  if (typeof children === 'function') return React.createElement("div", null, children(matches));
   if (!matches) return null;
-  return React__default["default"].createElement("div", null, children);
+  return React.createElement("div", null, children);
 }
 
-exports.MediaQuery = MediaQuery;
-exports["default"] = useMediaQuery;
-//# sourceMappingURL=index.js.map
+export { MediaQuery, useMediaQuery as default };
+//# sourceMappingURL=index.modern.mjs.map

@@ -23,10 +23,10 @@ interface MediaProps {
   maxWidth?: number;
   minHeight?: number;
   maxHeight?: number;
-  // minResolution?: number | `${number}dppx`;
-  minResolution?: number | string;
-  // maxResolution?: number | `${number}dppx`;
-  maxResolution?: number | string;
+  minResolution?: number | `${number}dppx`;
+  // minResolution?: number | string;
+  maxResolution?: number | `${number}dppx`;
+  // maxResolution?: number | string;
   children: React.ReactNode | ((matches: boolean) => React.ReactNode);
 }
 
