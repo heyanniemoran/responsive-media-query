@@ -24,25 +24,14 @@ interface MediaProps {
   minHeight?: number;
   maxHeight?: number;
   minResolution?: number | `${number}dppx`;
-  // minResolution?: number | string;
   maxResolution?: number | `${number}dppx`;
-  // maxResolution?: number | string;
   children: React.ReactNode | ((matches: boolean) => React.ReactNode);
 }
 
 export function MediaQuery({ children, ...props }: MediaProps) {
   const query = Object.entries(props)
     .map(([key, value]) => {
-      const condition: string = key
-        .split('')
-        .map((letter: string, idx: number) => {
-          return letter === letter.toUpperCase()
-            ? idx === 0
-              ? letter.toLowerCase()
-              : '-' + letter.toLowerCase()
-            : letter;
-        })
-        .join('');
+      const condition: string = key.replace(/([A-Z])/g, '-$&').toLowerCase();
       switch (condition) {
         case 'orientation':
           return '(' + condition + ': ' + value + ')';
