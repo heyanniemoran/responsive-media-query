@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-export default function useMediaQuery(obj: { query: string }) {
+export function useMediaQuery(obj: { query: string }) {
   const [state, setState] = useState(() => window.matchMedia(obj.query).matches);
 
   useEffect(() => {
     const mql = window.matchMedia(obj.query);
-    function handler(e: MediaQueryListEvent) {
-      setState(e.matches);
+    handler();
+    function handler() {
+      setState(mql.matches);
     }
     mql.addEventListener('change', handler);
     return () => {

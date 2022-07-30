@@ -15,7 +15,7 @@ npm install --save @heyanniemoran/responsive-media-query
 
 ```tsx
 import React from 'react'
-import useMediaQuery from '@heyanniemoran/responsive-media-query'
+import { useMediaQuery } from '@heyanniemoran/responsive-media-query'
 
 const Example = () => {
   const isDesktopOrLaptop = useMediaQuery({
