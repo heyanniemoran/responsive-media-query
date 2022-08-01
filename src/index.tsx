@@ -46,8 +46,8 @@ export function MediaQuery({ children, ...props }: MediaProps) {
     .join(' and ');
   const matches = useMediaQuery({ query: query });
 
-  if (typeof children === 'function') return <div>{children(matches)}</div>;
+  if (typeof children === 'function') return <>{children(matches)}</>;
 
   if (!matches) return null;
-  return <div>{children}</div>;
+  return <>{children}</>;
 }

@@ -52,7 +52,7 @@ const Example = () => (
         <p>You also have a huge screen</p>
       </MediaQuery>
     </MediaQuery>
-    <MediaQuery minResolution="2dppx"> {
+    <MediaQuery minResolution="2dppx">
       {(matches) =>
         matches
           ? <p>You are retina</p>
